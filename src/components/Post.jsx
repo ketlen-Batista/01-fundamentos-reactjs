@@ -39,16 +39,26 @@ export function Post({ author, publishedAt, content }) {
     }
 
     function handleNewCommentChange() {
+        event.target.setCustomValidity('')
         setNewCommentText(event.target.value);
         
     }
-    
-    function deleteComment(comment){
-
+     
+    function handleNewCommentInvalid () {
+        event.target.setCustomValidity('Esse campo é obrigatório!')
     }
     
-    const publishedAtDateRelativeToNow = formatDistanceToNow (publishedAt,{locale: ptBR,
-    })
+    function deleteComment(commentToDelete){
+        const commentsWithoutDeletedOne= comments.filter(comment => {
+            return comment !== commentToDelete;
+        })
+
+
+     setComments(commentsWithoutDeletedOne);
+    }
+    
+    // const publishedAtDateRelativeToNow = formatDistanceToNow (publishedAt,{locale: ptBR,
+    // })
 
     
 
@@ -92,10 +102,14 @@ export function Post({ author, publishedAt, content }) {
         placeholder="Deixa um comentário"
         value= {newCommentText}
         onChange={handleNewCommentChange}
+        onInvalid={handleNewCommentInvalid}
+        required
         />
 
         <footer> 
-            <button type="submit">Publicar</button>
+            <button type="submit" disabled={newCommentText.length == 0}>
+                Publicar
+                </button>
         </footer>
         </form>
 
